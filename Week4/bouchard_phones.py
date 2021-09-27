@@ -17,6 +17,9 @@ while userInput != "":          # End program if blank user input
     userInput = input("Enter a last name or first and last name (Just press Enter to quit): ")
     print("\n")
 
+    while userInput.count(" ") > 1:
+        userInput = input("Please only use a last name or a first and last name: ")
+
     # Open phones.txt file and read through each line
     file = open("phones.txt", 'r')
 
@@ -29,5 +32,6 @@ while userInput != "":          # End program if blank user input
         # Check user input compared to last name OR first and last name
         if userInput.lower() == lastName or userInput.lower() == firstName + " " + lastName:
             # Return phone number for name matching user input
-            print(lastName.capitalize() + ", " + firstName.capitalize() + " " + phoneNumber, end="")
+            print(firstName.capitalize() + " " + lastName.capitalize() + ", " + phoneNumber, end="")
             print("\n")
+
