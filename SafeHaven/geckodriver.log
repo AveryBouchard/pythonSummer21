@@ -1,0 +1,30 @@
+1633741689890	geckodriver	INFO	geckodriver 0.19.1
+1633741689895	geckodriver	INFO	Listening on 127.0.0.1:42559
+1633741691075	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-profile" "/tmp/rust_mozprofile.UmZKcu5M0vS8"
+*** You are running in headless mode.
+1633741691577	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1633741692891	Marionette	INFO	Listening on port 45197
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1633741856519	geckodriver	INFO	geckodriver 0.19.1
+1633741856526	geckodriver	INFO	Listening on 127.0.0.1:58459
+1633741857649	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-profile" "/tmp/rust_mozprofile.nWFfmz3cDeys"
+*** You are running in headless mode.
+1633741858420	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1633741861206	Marionette	INFO	Listening on port 33067
+JavaScript error: resource://services-settings/Attachments.jsm, line 391: TypeError: http://%(server)s/dummy/blocklist// is not a valid URL.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1633865372291	geckodriver	INFO	geckodriver 0.19.1
+1633865372294	geckodriver	INFO	Listening on 127.0.0.1:51873
+1633865373411	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-profile" "/tmp/rust_mozprofile.EVkfpj6V7Q2S"
+*** You are running in headless mode.
+1633865373802	Marionette	INFO	Marionette enabled
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+1633865374982	Marionette	INFO	Listening on port 33177
+Exiting due to channel error.
+Exiting due to channel error.
