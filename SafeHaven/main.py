@@ -1,16 +1,30 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-import datetime
 import time
+import user_info
 from user_info import username, password
 from edit_csv_files import edit_csv_file
+import os
 
 driver = Chrome()
 Chrome(executable_path='/home/avery/.local/bin/chromedriver')
 
-input_file = "./Leads.csv"
-output_file = "./Leads_edit.csv"
+
+def main():
+
+    rep_name_input = " "
+
+    while rep_name_input != "":
+        login_to_quickbase()
+
+        rep_name_input = input("What rep are you making the list for? ")
+
+        input_zips(rep_name_input)
+
+        edit_csv_file(find_newest_file(), save_file_name(rep_name_input), get_state(rep_name_input))
+
+        upload_to_sales_rabbit(rep_name_input)
 
 
 def login_to_quickbase():
@@ -42,15 +56,15 @@ def login_to_quickbase():
     driver.get("https://davidyost-7821.quickbase.com/db/bjvssf6xv?a=q&qid=906")
 
 
-def input_zips():
-    number_of_reps = int(input("How many lists do you need to make? "))
+def input_zips(rep_name):
+    number_of_reps = 1
 
     text_field_number, reps = 0, 0
 
     #  gives the option to input zip codes for multiple reps
     while reps < number_of_reps:
 
-        zip_code_input = get_zips()
+        zip_code_input = get_zips(rep_name)
 
         #  loops through all input zip codes
         for zip_code in zip_code_input:
@@ -69,7 +83,7 @@ def input_zips():
 
         display_report_button.send_keys(Keys.ENTER)
 
-        time.sleep(1)
+        time.sleep(2)
 
         download_button = driver.find_element_by_id("download")
 
@@ -86,21 +100,72 @@ def input_zips():
         driver.find_element_by_name("matchText_0").clear()
 
 
-def get_zips():
+def get_zips(rep):
 
-    zip_codes = input("Input zip codes, separated by spaces: ").split()
+    zip_codes = user_info.reps_dict.get(rep)["zips"].split()
 
     return zip_codes
 
 
-def get_state():
-    state = input("What state will they be selling in? (MA or RI) ")
+def get_state(rep):
+    state = user_info.reps_dict.get(rep)["state"]
 
     return state
 
 
-login_to_quickbase()
+def save_file_name(rep):
+    saved_file_name = user_info.reps_dict.get(rep)["file_name"]
+    saved_file_name = saved_file_name + ".csv"
 
-input_zips()
+    return saved_file_name
 
-edit_csv_file(input_file, output_file, get_state())
+
+def find_newest_file():
+    folder_path = r'/home/avery/Downloads'
+    os.chdir(folder_path)
+    newest_file = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)[-1]
+    return newest_file
+
+
+def upload_to_sales_rabbit(rep):
+    driver.get('https://signin.salesrabbit.com/u/login?state=hKFo2SBZMVJuTVFzMnRzSlYxcW9MWl9JNmhjV0pYMnNkQUpwNKFur3VuaX'
+               'ZlcnNhbC1sb2dpbqN0aWTZIG1PODVEdXp1bnlfVlNJQXJxVFVCXzZYbHJjY0d3VVp0o2NpZNkgME9PVDF2SWN4NTdmWkN3cjdQM1RXZ'
+               'DkxMjFCQ1o2Ulc')
+
+    username_field = driver.find_element_by_name("username")
+    password_field = driver.find_element_by_name("password")
+
+    username_field.send_keys(username)
+    password_field.send_keys(password)
+    driver.find_element_by_name("action").send_keys(Keys.ENTER)
+
+    driver.get("https://app.salesrabbit.com/recruiting/import.php")
+
+    upload_file = find_newest_file()
+    choose_file_button = driver.find_element_by_name("csv")
+    file_folder = "/home/avery/Downloads/"
+    choose_file_button.send_keys(file_folder + upload_file)
+
+    drop_down_menu = Select(driver.find_element_by_name("importType"))
+    drop_down_menu.select_by_visible_text("Leads")
+
+    driver.find_element_by_name("forward").send_keys(Keys.ENTER)
+
+    driver.find_element_by_name("forward").send_keys(Keys.ENTER)
+
+    lead_owner_drop_down = Select(driver.find_element_by_id('1'))
+    lead_owner_drop_down.select_by_visible_text(user_info.reps_dict.get(rep)["lead_owner"])
+
+    lead_status_drop_down = Select(driver.find_element_by_id('2'))
+    lead_status_drop_down.select_by_visible_text("Dispatched")
+
+    driver.find_element_by_name("forward").send_keys(Keys.ENTER)
+
+    driver.find_element_by_name("forward").send_keys(Keys.ENTER)
+
+
+rep_name_input = "avery"
+# main()
+# upload_to_sales_rabbit()
+edit_csv_file(find_newest_file(), save_file_name(rep_name_input), get_state(rep_name_input))
+# print(user_info.reps_dict.get(user)["zips"])
