@@ -13,10 +13,13 @@ Chrome(executable_path='/home/avery/.local/bin/chromedriver')
 
 def main():
 
+    login_to_sales_rabbit()
+
+    login_to_quickbase()
+
     rep_name_input = " "
 
     while rep_name_input != "":
-        login_to_quickbase()
 
         rep_name_input = input("What rep are you making the list for? ")
 
@@ -33,12 +36,14 @@ def login_to_quickbase():
     username_field = driver.find_element_by_name("loginid")
     password_field = driver.find_element_by_name("password")
 
-    #  put these into a separate file for security
-    office = "Providence"
-
     #  input username and password
     username_field.send_keys(username)
     password_field.send_keys(password + Keys.ENTER)
+
+
+def input_zips(rep_name):
+
+    office = "Providence"
 
     #  navigate to leads page
     driver.get("https://davidyost-7821.quickbase.com/db/bjvssf6xf?from=myqb")
@@ -55,8 +60,6 @@ def login_to_quickbase():
     #  navigate to 2018 Multi Zip
     driver.get("https://davidyost-7821.quickbase.com/db/bjvssf6xv?a=q&qid=906")
 
-
-def input_zips(rep_name):
     number_of_reps = 1
 
     text_field_number, reps = 0, 0
@@ -91,14 +94,6 @@ def input_zips(rep_name):
 
         time.sleep(1)
 
-        driver.back()  # go back to multi zip page
-
-        text_field_number = 0
-
-        time.sleep(1)
-
-        driver.find_element_by_name("matchText_0").clear()
-
 
 def get_zips(rep):
 
@@ -127,7 +122,7 @@ def find_newest_file():
     return newest_file
 
 
-def upload_to_sales_rabbit(rep):
+def login_to_sales_rabbit():
     driver.get('https://signin.salesrabbit.com/u/login?state=hKFo2SBZMVJuTVFzMnRzSlYxcW9MWl9JNmhjV0pYMnNkQUpwNKFur3VuaX'
                'ZlcnNhbC1sb2dpbqN0aWTZIG1PODVEdXp1bnlfVlNJQXJxVFVCXzZYbHJjY0d3VVp0o2NpZNkgME9PVDF2SWN4NTdmWkN3cjdQM1RXZ'
                'DkxMjFCQ1o2Ulc')
@@ -138,6 +133,9 @@ def upload_to_sales_rabbit(rep):
     username_field.send_keys(username)
     password_field.send_keys(password)
     driver.find_element_by_name("action").send_keys(Keys.ENTER)
+
+
+def upload_to_sales_rabbit(rep):
 
     driver.get("https://app.salesrabbit.com/recruiting/import.php")
 
@@ -164,8 +162,8 @@ def upload_to_sales_rabbit(rep):
     driver.find_element_by_name("forward").send_keys(Keys.ENTER)
 
 
-rep_name_input = "avery"
-# main()
+# rep_name_input = "avery"
+main()
 # upload_to_sales_rabbit()
-edit_csv_file(find_newest_file(), save_file_name(rep_name_input), get_state(rep_name_input))
+# edit_csv_file(find_newest_file(), save_file_name(rep_name_input), "Edited")
 # print(user_info.reps_dict.get(user)["zips"])

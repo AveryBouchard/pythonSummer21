@@ -23,7 +23,7 @@ def edit_csv_file(read_file, write_file, state="RI"):
     csv_write.writerow(header)
 
     for row in csv_read:
-        if row[10] != 'NHE' or row[10] != 'VAC':
+        if row[10] != 'NHE' and row[10] != 'VAC':
             row[2] = state
             csv_write.writerow(row)
 
@@ -36,13 +36,8 @@ def edit_csv_file(read_file, write_file, state="RI"):
             visit_date = str(split_year + ' ' + split_month + ' ' + split_day)
             visit_date = datetime.datetime.strptime(visit_date, "%Y %m %d")
 
-            empty_date = visit_date + two_weeks
-            vacant_date = visit_date + one_month
-            off_the_list_date = visit_date + six_months
-
-            if row[10] == "NHE" and today > empty_date or \
-                    row[10] == "VAC" and today > vacant_date or \
-                    today > off_the_list_date:
+            if row[10] == "NHE" and visit_date > today - two_weeks or \
+                    row[10] == "VAC" and visit_date > today - one_month:
                 row.clear()
 
             else:
