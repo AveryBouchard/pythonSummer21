@@ -162,8 +162,11 @@ def upload_to_sales_rabbit(rep):
     driver.find_element_by_name("forward").send_keys(Keys.ENTER)
 
 
-# rep_name_input = "avery"
+# rep_name_input = "wilson"
 main()
-# upload_to_sales_rabbit()
-# edit_csv_file(find_newest_file(), save_file_name(rep_name_input), "Edited")
+# login_to_sales_rabbit()
+# upload_to_sales_rabbit(rep_name_input)
+# edit_csv_file("/home/avery/Downloads/Leads (1).csv", save_file_name(rep_name_input), "MA")
 # print(user_info.reps_dict.get(user)["zips"])
+
+driver.close()

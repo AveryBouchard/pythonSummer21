@@ -7,8 +7,8 @@ def edit_csv_file(read_file, write_file, state="RI"):
         ,'# 0f Visits','Last Visit','Visit Date','LVS','Appointment Date & TIme','Notes','Notes','Unix Code',
               'Visit Rep','Date Created','Market','Visit - Property Owner 1','Visit - Property Owner 2','Lead Source']
 
-    read = open(read_file, "r")
-    write = open(write_file, "w")
+    read = open(read_file, "r", encoding='ISO-8859-1')
+    write = open(write_file, "w", encoding='ISO-8859-1')
 
     csv_read = csv.reader(read)
     csv_write = csv.writer(write)
