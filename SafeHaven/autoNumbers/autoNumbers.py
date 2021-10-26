@@ -81,6 +81,7 @@ def download_rep_route(office):
     time.sleep(2)
 
 
+# converts the date from today into a string and adds an equation for yesterday's date
 def format_date():
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=1)
@@ -91,54 +92,55 @@ def format_date():
 
 
 def scrape_csv(sales_rep):
+    # opens newest file in the Downloads folder
     read_file = get_newest_file()
     read = open(read_file, 'r')
     csv_read = csv.reader(read)
+    # skip the first line of the csv file (header)
     next(csv_read)
-    today = datetime.date.today()
-    dictionary = {}
+    # today = datetime.date.today()
+    # dictionary = {}
 
+    # initialize a dictionary for the rep object
     rep = {"Doors Knocked": 0, "Contacts": 0, "Start Time": 0, "End Time": 0, "Sales": 0}
 
+    # read through each line of the csv file
     for row in csv_read:
-        rep_name = row[1]
-        lead_status = row[2]
-        visit_time = row[7].split()[1]
         dictionary = {"Rep": row[1], "Lead Status": row[2], "Visit Time": row[7].split()[1], "Visits": 0, "Contacts": 0,
                       "Start Time": 0, "End Time": 0, "Sales": 0}
+        # the following block of code adjusts the visit hour to Eastern Standard Time
         rep_visit_time = dictionary.get("Visit Time").split()[0]
         adj_visit_hour = str(int(rep_visit_time[1]) + 1)
         est_rep_visit_time = str(rep_visit_time[0] + adj_visit_hour + rep_visit_time[2:])
 
-        # print(est_rep_visit_time)
-
-        # print(rep_visit_time)
-
-        # print(dictionary)
-
+        # check if line contains the rep we are looking for, and if it does...
         if dictionary.get("Rep") == sales_rep:
 
+            # add a knocked door for every line which contains that rep
             rep["Doors Knocked"] += 1
 
+            # gets the first door knocked time and makes that the start time (+1 for EST)
             if rep["Start Time"] == 0:
                 rep["Start Time"] = est_rep_visit_time
 
+            # check if lead status insinuates rep spoke to somebody at the door and considers that a contact
             if dictionary.get("Lead Status") == "NID" or dictionary.get("Lead Status") == "NIP" or \
                     dictionary.get("Lead Status") == "GB" or dictionary.get("Lead Status") == "APPT" or \
                     dictionary.get("Lead Status") == "Sold":
                 rep["Contacts"] += 1
 
+            # looks for a sold account
             if dictionary.get("Lead Status") == "Sold":
                 rep["Sales"] += 1
 
+            # takes the last time with the reps name on it and makes that the end time
             rep["End Time"] = est_rep_visit_time
 
+    # prints the rep dictionary to the console as long as there were doors knocked
     if rep["Doors Knocked"] != 0:
         print(sales_rep + ': \nDoors Knocked: ' + str(rep["Doors Knocked"]) + "\nContacts: " +
                               str(rep["Contacts"]) + "\nStart Time: " + str(rep["Start Time"]) + "\nEnd Time: " +
                               str(rep["End Time"]) + "\nSales: " + str(rep["Sales"]) + "\n\n")
-
-    # return message_return
 
 
 def get_newest_file():
