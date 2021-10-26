@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/SafeHaven/Q NB 10-22.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

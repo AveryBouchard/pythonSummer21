@@ -106,6 +106,13 @@ def scrape_csv(sales_rep):
         visit_time = row[7].split()[1]
         dictionary = {"Rep": row[1], "Lead Status": row[2], "Visit Time": row[7].split()[1], "Visits": 0, "Contacts": 0,
                       "Start Time": 0, "End Time": 0, "Sales": 0}
+        rep_visit_time = dictionary.get("Visit Time").split()[0]
+        adj_visit_hour = str(int(rep_visit_time[1]) + 1)
+        est_rep_visit_time = str(rep_visit_time[0] + adj_visit_hour + rep_visit_time[2:])
+
+        # print(est_rep_visit_time)
+
+        # print(rep_visit_time)
 
         # print(dictionary)
 
@@ -114,16 +121,17 @@ def scrape_csv(sales_rep):
             rep["Doors Knocked"] += 1
 
             if rep["Start Time"] == 0:
-                rep["Start Time"] = dictionary.get("Visit Time")
+                rep["Start Time"] = est_rep_visit_time
 
             if dictionary.get("Lead Status") == "NID" or dictionary.get("Lead Status") == "NIP" or \
-                    dictionary.get("Lead Status") == "GB" or dictionary.get("Lead Status") == "APPT":
+                    dictionary.get("Lead Status") == "GB" or dictionary.get("Lead Status") == "APPT" or \
+                    dictionary.get("Lead Status") == "Sold":
                 rep["Contacts"] += 1
 
             if dictionary.get("Lead Status") == "Sold":
                 rep["Sales"] += 1
 
-            rep["End Time"] = dictionary.get("Visit Time")
+            rep["End Time"] = est_rep_visit_time
 
     if rep["Doors Knocked"] != 0:
         print(sales_rep + ': \nDoors Knocked: ' + str(rep["Doors Knocked"]) + "\nContacts: " +

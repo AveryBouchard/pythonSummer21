@@ -18,7 +18,7 @@ def edit_csv_file(read_file, write_file, state="RI"):
     today = datetime.datetime.today()
     two_weeks = datetime.timedelta(days=14)
     one_month = datetime.timedelta(days=30)
-    six_months = datetime.timedelta(weeks=48)
+    too_new = datetime.timedelta(days=5)
 
     csv_write.writerow(header)
 
@@ -33,11 +33,19 @@ def edit_csv_file(read_file, write_file, state="RI"):
             split_month = split_date[2:4]
             split_day = split_date[8:10]
 
+            split_closing_date = str(row[8].split('-'))
+            split_closing_year = split_closing_date[14:18]
+            split_closing_month = split_closing_date[2:4]
+            split_closing_day = split_closing_date[8:10]
+
+            closing_date = str(split_closing_year + ' ' + split_closing_month + ' ' + split_closing_day)
+            closing_date = datetime.datetime.strptime(closing_date, "%Y %m %d")
             visit_date = str(split_year + ' ' + split_month + ' ' + split_day)
             visit_date = datetime.datetime.strptime(visit_date, "%Y %m %d")
 
             if row[10] == "NHE" and visit_date > today - two_weeks or \
-                    row[10] == "VAC" and visit_date > today - one_month:
+                    row[10] == "VAC" and visit_date > today - one_month or \
+                    closing_date > today - too_new:
                 row.clear()
 
             else:
