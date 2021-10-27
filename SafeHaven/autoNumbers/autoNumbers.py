@@ -90,6 +90,8 @@ def format_date():
     year = str(yesterday).split('-')[0]
     formatted_date = f"{month}-{day}-{year}"
 
+    return formatted_date
+
 
 def scrape_csv(sales_rep):
     # opens newest file in the Downloads folder
