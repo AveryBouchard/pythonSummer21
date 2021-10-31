@@ -96,7 +96,7 @@ def format_date():
 def scrape_csv(sales_rep):
     # opens newest file in the Downloads folder
     read_file = get_newest_file()
-    read = open(read_file, 'r')
+    read = open(read_file, 'r', encoding='ISO-8859-1')
     csv_read = csv.reader(read)
     # skip the first line of the csv file (header)
     next(csv_read)
