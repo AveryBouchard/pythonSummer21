@@ -6,6 +6,7 @@ import user_info
 from user_info import username, password
 from edit_csv_files import edit_csv_file
 import os
+from user_info import SafeHavenEmployee
 
 driver = Chrome()
 Chrome(executable_path='/home/avery/.local/bin/chromedriver')
@@ -21,7 +22,7 @@ def main():
 
     while rep_name_input != "":
 
-        rep_name_input = input("What rep are you making the list for? (avery, mike, ian, quintin, wilson, ian m )")\
+        rep_name_input = input("What rep are you making the list for? (avery, mike, ian, quintin, wilson, ian m) ")\
             .lower()
 
         input_zips(rep_name_input)

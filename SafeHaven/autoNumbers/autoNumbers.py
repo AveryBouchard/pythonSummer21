@@ -3,7 +3,7 @@ import smtplib, ssl
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from user_info import username, password
+from SafeHaven.AutoMagic.user_info import username, password
 import time
 import datetime
 import os
@@ -152,7 +152,7 @@ def get_newest_file():
     return newest_file
 
 
-main()
+# main()
 # scrape_csv("Joseph O'Neill 47661")
 # scrape_csv('Ralph Cistoldi 62492')
 # scrape_csv('Ian Sauvageau 39668')
@@ -164,4 +164,4 @@ main()
 # scrape_csv('Avery Bouchard 39819')
 # scrape_csv()
 
-driver.close()
+# driver.close()
