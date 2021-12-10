@@ -57,6 +57,8 @@ ian_m = SafeHavenEmployee("ian m",
                           "MA",
                           "65063")
 
+providence_team = (avery, mike, ian, quintin, wilson, ian_m)
+
 
 def trax_login(from_date, to_date="", rep_id=""):
     driver.get("https://secure.securitytrax.com/safehaven/login.php?logout=true&ef=L3NhZmVoYXZlbi9jdXN0b21lcnMucGhw")

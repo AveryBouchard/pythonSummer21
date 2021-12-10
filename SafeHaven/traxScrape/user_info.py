@@ -17,4 +17,5 @@ password = "Duarte1986()"
 # }
 
 avery = SafeHavenEmployee("avery", "02901 02903 02905 02907 02909 02910", "Avery Bouchard 39819", f"Avery PVD {month}-{day}", "RI", "39819")
+mike = SafeHavenEmployee("mike", "02908 02904 02911 02919 02864 02865", "Michael Bottasso 48362", f"Mike Prov {month}-{day}", "RI", "48362")
 

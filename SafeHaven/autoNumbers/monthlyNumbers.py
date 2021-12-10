@@ -121,19 +121,21 @@ def login_to_quickbase():
 def download_rep_route(office):
 
     #  navigate to leads page
-    driver.get("https://davidyost-7821.quickbase.com/db/bjvssf62r?a=q&qid=214")
+    driver.get("https://davidyost-7821.quickbase.com/db/bjvssf62r?a=q&qid=158")
+
+    #  get first day of the month
+    today = datetime.datetime.today().date()
+    first_day_of_the_month = today.replace(day=1)
+
+    first_day_last_month = format_beginning_of_last_month()
+    last_day_last_month = format_last_month()
 
     #  Choose office from the dropdown menu
     time.sleep(3)
     drop_down_menu = Select(driver.find_element_by_id("matchTextMC_0"))
     drop_down_menu.select_by_visible_text(office)
-    if datetime.date.today().weekday() == 0:
-        Select(driver.find_element_by_id("how2_1")).select_by_value("past")
-        driver.find_element_by_name("relDateQuant_1").send_keys(Keys.BACKSPACE + "2")
-
-    else:
-        drop_down_date_menu = Select(driver.find_element_by_id("how2_1"))
-        drop_down_date_menu.select_by_visible_text("yesterday")
+    driver.find_element_by_id("exactDate_1").send_keys(first_day_last_month)
+    driver.find_element_by_id("exactDate_2").send_keys(last_day_last_month)
 
     driver.find_element_by_name("display").click()  # click "Display Report" button
     time.sleep(4)
@@ -142,12 +144,25 @@ def download_rep_route(office):
 
 
 # converts the date from today into a string and adds an equation for yesterday's date
-def format_date():
+def format_last_month():
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
-    month = str(yesterday).split('-')[1]
-    day = str(yesterday).split('-')[2]
-    year = str(yesterday).split('-')[0]
+    last_day_of_last_month = datetime.datetime.today().replace(day=1) - datetime.timedelta(days=1)
+    month = str(last_day_of_last_month).split('-')[1]
+    day = str(last_day_of_last_month).split('-')[2]
+    year = str(last_day_of_last_month).split('-')[0]
+    formatted_date = f"{month}-{day}-{year}"
+
+    return formatted_date
+
+
+#  finds date at the beginning of the month and returns as a formatted string
+def format_beginning_of_last_month():
+    today = datetime.date.today()
+    last_day_of_last_month = datetime.datetime.today().replace(day=1) - datetime.timedelta(days=1)
+    beginning = datetime.datetime.today().replace(day=1) - datetime.timedelta(days=last_day_of_last_month.day)
+    month = str(beginning).split('-')[1]
+    day = "1"
+    year = str(beginning).split('-')[0]
     formatted_date = f"{month}-{day}-{year}"
 
     return formatted_date
@@ -171,7 +186,7 @@ def scrape_csv(sales_rep):
 
     # read through each line of the csv file
     for row in csv_read:
-        dictionary = {"Rep": row[1], "Lead Status": row[2], "Visit Time": row[6].split()[1], "Visits": 0, "Contacts": 0,
+        dictionary = {"Rep": row[1], "Lead Status": row[2], "Visit Time": row[5].split()[1], "Visits": 0, "Contacts": 0,
                       "Start Time": 0, "End Time": 0, "Sales": 0}
         # the following block of code adjusts the visit hour to Eastern Standard Time
         rep_visit_time = dictionary.get("Visit Time").split()[0]
@@ -212,19 +227,14 @@ def scrape_csv(sales_rep):
             if dictionary.get("Lead Status") == "AHS":
                 ahs += 1
 
-            knock_times.append(dictionary.get("Visit Time"))
-
             # if dictionary.get("Visit Time") == previous_time or dictionary.get("Visit Time") - previous_time < 1:
             #     print("Less than a minute between doors at " + str(previous_time))
 
     # prints the rep dictionary to the console as long as there were doors knocked
     if rep["Doors Knocked"] != 0:
         print(sales_rep + ': \nDoors Knocked: ' + str(rep["Doors Knocked"]) + "\nContacts: " +
-                              str(rep["Contacts"]) + "\nStart Time: " + str(rep["Start Time"]) + "\nEnd Time: " +
-                              str(rep["End Time"]) + "\nSales: " + str(rep["Sales"]) + "\n")
+                              str(rep["Contacts"]) + "\nSales: " + str(rep["Sales"]) + "\n")
         print(f"NID: {nid}      NIP: {nip}      GB/APPT: {gb_appt}      Empty: {nhe_vac}        Security: {ahs}")
-        print("\nKnock Times: ")
-        print(*knock_times, sep=", ")
         print("\n\n")
 
 

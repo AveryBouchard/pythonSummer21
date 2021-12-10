@@ -84,15 +84,11 @@ def input_zips(rep_name):
 
         reps += 1
 
-        display_report_button = driver.find_element_by_id("saveButton")
+        driver.find_element_by_id("saveButton").click()  # click "Display Report" button
 
-        display_report_button.send_keys(Keys.ENTER)
+        time.sleep(3)
 
-        time.sleep(2)
-
-        download_button = driver.find_element_by_id("download")
-
-        download_button.send_keys(Keys.ENTER)  # download the CSV file
+        driver.find_element_by_id("download").click()  # download the CSV file
 
         time.sleep(1)
 
