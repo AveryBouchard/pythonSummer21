@@ -62,6 +62,11 @@ def main():
         scrape_csv('Avery Bouchard 39819')
     except ValueError:
         pass
+    try:
+        scrape_csv("Ruben Martins 68653")
+    except ValueError:
+        pass
+
     print("Boston Leads:\n")
     download_rep_route("Boston")
     try:
@@ -98,6 +103,10 @@ def main():
         pass
     try:
         scrape_csv('Avery Bouchard 39819')
+    except ValueError:
+        pass
+    try:
+        scrape_csv("Ruben Martins 68653")
     except ValueError:
         pass
 
